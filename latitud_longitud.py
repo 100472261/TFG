@@ -31,11 +31,3 @@ def convertir_longitud_a_GMS(decimal):
     minutos = int((decimal - grados) * 60)
     segundos = (decimal - grados - minutos / 60) * 3600
     return grados, minutos, segundos, direccion
-
-#Madrid (40° 25' 0.049'' N; 3° 42' 12.958'' O)
-latitud = convertir_latitud_a_decimal(40, 25, 0.049, 'N')
-longitud = convertir_longitud_a_decimal(3, 42, 12.958, 'O')
-print(latitud, longitud)
-latitud_GMS = convertir_latitud_a_GMS(latitud)
-longitud_GMS = convertir_longitud_a_GMS(longitud)
-print(f"{latitud_GMS[0]}° {latitud_GMS[1]}' {latitud_GMS[2]:.3f}'' {latitud_GMS[3]}; {longitud_GMS[0]}° {longitud_GMS[1]}' {longitud_GMS[2]:.3f}'' {longitud_GMS[3]}")
