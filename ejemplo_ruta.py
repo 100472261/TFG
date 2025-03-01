@@ -1,3 +1,4 @@
+import numpy as np
 from bearing import calcular_bearing
 from latitud_longitud import convertir_latitud_a_decimal, convertir_longitud_a_decimal
 
@@ -49,8 +50,14 @@ def ejemplo():
         bearing = calcular_bearing(p1, p2)
         angulos_ruta.append(round(bearing, 3))
 
+    lista_latitudes = np.array(lista_latitudes)
+    lista_longitudes = np.array(lista_longitudes)
+    angulos_ruta = np.array(angulos_ruta)
+
     return lista_latitudes, lista_longitudes, angulos_ruta
 
 if __name__ == "__main__":
     lista_latitudes, lista_longitudes, angulos_ruta = ejemplo()
+    print("Latitudes ->",lista_latitudes)
+    print("Longitudes ->",lista_longitudes)
     print("Ángulos ->",angulos_ruta)
