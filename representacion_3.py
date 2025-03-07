@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from ejemplo_ruta import ejemplo
+from Papelera.ejemplo_ruta import ejemplo
 from scipy.fftpack import fft, fftfreq, ifft
 
 lista_latitudes, lista_longitudes, angulos_ruta = ejemplo()

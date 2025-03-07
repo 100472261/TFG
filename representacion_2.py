@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from ejemplo_ruta import ejemplo
+from Papelera.ejemplo_ruta import ejemplo
 
 lista_latitudes, lista_longitudes, angulos_ruta = ejemplo()
 

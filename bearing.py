@@ -1,9 +1,9 @@
 import numpy as np
 
-def calcular_bearing(p1, p2):
+def calcular_bearing(lat1, lon1, lat2, lon2):
 
-    lat1, lon1 = p1[0], p1[1]
-    lat2, lon2 = p2[0], p2[1]
+    #lat1, lon1 = p1[0], p1[1]
+    #lat2, lon2 = p2[0], p2[1]
 
     lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
     
