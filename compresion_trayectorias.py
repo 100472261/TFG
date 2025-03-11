@@ -1,5 +1,8 @@
+import os
+import zipfile
 import numpy as np
 import pandas as pd
+from io import BytesIO
 import matplotlib.pyplot as plt
 
 #Calcula la proyección escalar del punto p sobre la línea entre a y b
@@ -58,39 +61,104 @@ def rdp(startIndex, endIndex, puntos_iniciales, puntos_finales, epsilon):
         puntos_finales.append(proximo_punto)
         rdp(proximo_punto, endIndex, puntos_iniciales, puntos_finales, epsilon)
 
-def graficar_rutas(puntos_originales, puntos_simplificados, id):
-    coordenadas_y, coordenadas_x = zip(*puntos_originales)
-    coordenadas_y_s, coordenadas_x_s = zip(*[puntos_originales[i] for i in puntos_simplificados])
+#Ajusta el número de puntos en la trayectoria simplificada
+def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_iniciales):
+    #Añade puntos dividiendo los segmentos más largos
+    while len(puntos_finales) < num_puntos_deseados:
+        max_gap = 0
+        index_to_insert = -1
 
+        for i in range(len(puntos_finales) - 1):
+            gap = puntos_finales[i + 1] - puntos_finales[i]
+            if gap > max_gap:
+                max_gap = gap
+                index_to_insert = i
+
+        if index_to_insert != -1:
+            new_point = (puntos_finales[index_to_insert] + puntos_finales[index_to_insert + 1]) // 2
+            if new_point not in puntos_finales:
+                puntos_finales.insert(index_to_insert + 1, new_point)
+
+    #Elimina los puntos con menor impacto geométrico
+    while len(puntos_finales) > num_puntos_deseados:
+        min_error = float('inf')
+        index_to_remove = -1
+
+        for i in range(1, len(puntos_finales) - 1):
+            d = distancia_punto_a_recta(
+                puntos_iniciales[puntos_finales[i]], 
+                puntos_iniciales[puntos_finales[i - 1]], 
+                puntos_iniciales[puntos_finales[i + 1]]
+            )
+
+            if d < min_error:
+                min_error = d
+                index_to_remove = i
+
+        if index_to_remove != -1:
+            puntos_finales.pop(index_to_remove)
+
+def graficar_rutas(puntos_originales, puntos_simplificados, id):
+    #coordenadas_y, coordenadas_x = zip(*puntos_originales)
+    coordenadas_y_s, coordenadas_x_s = zip(*[puntos_originales[i] for i in puntos_simplificados])
     fig, ax = plt.subplots(figsize=(6, 6))
-    ax.plot(coordenadas_x, coordenadas_y, marker="o", linestyle="-", color="b", label="Original")
-    ax.plot(coordenadas_x_s, coordenadas_y_s, marker="x", linestyle="-", color="r", label="Simplificada")
-    ax.legend()
-    plt.savefig(f"./Imagenes/Pruebas_compresion/Trayectoria_comprimida_{id}.png")
+    #ax.plot(coordenadas_x, coordenadas_y, marker="o", linestyle="-", color="b", label="Original")
+    ax.plot(coordenadas_x_s, coordenadas_y_s, marker="o", linestyle="-", color="k", label="Simplificada")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    #ax.legend()
+    #plt.savefig(f"./Imagenes/Pruebas_compresion/Trayectoria_comprimida_{id}.png")
+    #plt.close(fig)
+    img_buffer = BytesIO()
+    plt.savefig(img_buffer, format="png")
     plt.close(fig)
+    img_buffer.seek(0)
+
+    zipf.writestr(f"Trayectoria_comprimida_{id}.png", img_buffer.read())
 
 if __name__ == "__main__":
-    df_path = "./Trayectorias/Tipos_de_barcos/Cargo_modificado.csv"
+
+    #df_path = "./Trayectorias/Tipos_de_barcos/Cargo_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Container_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Cruise_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Fishing_modificado.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/Tanker_modificado.csv"
+
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    trajectory_ids = [21]
+    img_dir = "./Imagenes/Trayectorias_comprimidas"
 
-    for id in trajectory_ids:
-        latitudes = df[df['Trajectory_ID'] == id]['Latitude'].tolist()
-        longitudes = df[df['Trajectory_ID'] == id]['Longitude'].tolist()
-        puntos_iniciales = np.array(list(zip(latitudes, longitudes)))
+    #zip_filename = os.path.join(img_dir, "Compressed_Cargo.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Container.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Cruise.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Fishing.zip")
+    zip_filename = os.path.join(img_dir, "Compressed_Tanker.zip")
 
-        if len(puntos_iniciales) < 3:
-            continue
+    os.makedirs(img_dir, exist_ok=True)
 
-        puntos_finales = [0]
-        epsilon = 0.00005
+    #trajectory_ids = [63, 38, 39, 21, 46, 36, 112, 70, 49]
 
-        rdp(0, len(puntos_iniciales) - 1, puntos_iniciales, puntos_finales, epsilon)
+    num_puntos_deseados = 8
+    trayectorias_omitidas = 0
 
-        puntos_finales.append(len(puntos_iniciales) - 1)
-        puntos_finales = sorted(puntos_finales)
-        print(puntos_finales)
-        graficar_rutas(puntos_iniciales, puntos_finales, id)
+    with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for id in trajectory_ids:
+            latitudes = df[df['Trajectory_ID'] == id]['Latitude'].tolist()
+            longitudes = df[df['Trajectory_ID'] == id]['Longitude'].tolist()
+            puntos_iniciales = np.array(list(zip(latitudes, longitudes)))
+            if len(puntos_iniciales) < num_puntos_deseados:
+                trayectorias_omitidas += 1
+                continue
+            puntos_finales = [0]
+            epsilon = 0.00005
+            rdp(0, len(puntos_iniciales) - 1, puntos_iniciales, puntos_finales, epsilon)
+            puntos_finales.append(len(puntos_iniciales) - 1)
+            puntos_finales = sorted(puntos_finales)
+            #print(puntos_finales)
+            ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_iniciales)
+            #print(puntos_finales)
+            graficar_rutas(puntos_iniciales, puntos_finales, id)
+
+    print(f"Imágenes comprimidas y guardadas OK !!!. Se han omitido {trayectorias_omitidas} trayectorias")
