@@ -2,7 +2,12 @@ import numpy as np
 import pandas as pd
 
 if __name__ == "__main__":
-    df_path = "./Trayectorias/Tipos_de_barcos/Cargo_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Cargo_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Container_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Cruise_modificado.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/Fishing_modificado.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/Tanker_modificado.csv"
+
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()

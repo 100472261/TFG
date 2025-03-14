@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from io import BytesIO
 import matplotlib.pyplot as plt
+from bearing import calcular_bearing
 
 #Calcula la proyección escalar del punto p sobre la línea entre a y b
 def calcular_proyeccion_escalar(p, a, b):
@@ -101,20 +102,31 @@ def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_inicial
 def graficar_rutas(puntos_originales, puntos_simplificados, id):
     #coordenadas_y, coordenadas_x = zip(*puntos_originales)
     coordenadas_y_s, coordenadas_x_s = zip(*[puntos_originales[i] for i in puntos_simplificados])
+    
     fig, ax = plt.subplots(figsize=(6, 6))
     #ax.plot(coordenadas_x, coordenadas_y, marker="o", linestyle="-", color="b", label="Original")
     ax.plot(coordenadas_x_s, coordenadas_y_s, marker="o", linestyle="-", color="k", label="Simplificada")
     ax.set_xticks([])
     ax.set_yticks([])
     #ax.legend()
-    #plt.savefig(f"./Imagenes/Pruebas_compresion/Trayectoria_comprimida_{id}.png")
-    #plt.close(fig)
+
     img_buffer = BytesIO()
     plt.savefig(img_buffer, format="png")
     plt.close(fig)
     img_buffer.seek(0)
 
     zipf.writestr(f"Trayectoria_comprimida_{id}.png", img_buffer.read())
+
+#Crea un nuevo .csv con la información de la trayectoria comprimida
+def guardar_puntos_seleccionados(df, indices_puntos_finales, trajectory_id, output_file, first_write):
+    df_seleccionado = df.iloc[indices_puntos_finales].copy()
+    df_seleccionado['Trajectory_ID'] = trajectory_id
+    df_seleccionado['Latitude_2'] = df_seleccionado['Latitude'].shift(-1)
+    df_seleccionado['Longitude_2'] = df_seleccionado['Longitude'].shift(-1)
+    df_seleccionado['Bearing'] = calcular_bearing(df_seleccionado['Latitude'], df_seleccionado['Longitude'], df_seleccionado['Latitude_2'], df_seleccionado['Longitude_2'])
+    mode = 'w' if first_write else 'a'
+    header = first_write
+    df_seleccionado.to_csv(output_file, mode=mode, index=False, header=header)
 
 if __name__ == "__main__":
 
@@ -129,6 +141,7 @@ if __name__ == "__main__":
     trajectory_ids = df['Trajectory_ID'].unique()
 
     img_dir = "./Imagenes/Trayectorias_comprimidas"
+    os.makedirs(img_dir, exist_ok=True)
 
     #zip_filename = os.path.join(img_dir, "Compressed_Cargo.zip")
     #zip_filename = os.path.join(img_dir, "Compressed_Container.zip")
@@ -136,29 +149,42 @@ if __name__ == "__main__":
     #zip_filename = os.path.join(img_dir, "Compressed_Fishing.zip")
     zip_filename = os.path.join(img_dir, "Compressed_Tanker.zip")
 
-    os.makedirs(img_dir, exist_ok=True)
+    output_dir = "./Trayectorias/Tipos_de_barcos"
+    os.makedirs(output_dir, exist_ok=True)
 
-    #trajectory_ids = [63, 38, 39, 21, 46, 36, 112, 70, 49]
+    #output_file = os.path.join(output_dir, f"Cargo_modificado_compressed.csv")
+    #output_file = os.path.join(output_dir, f"Container_modificado_compressed.csv")
+    #output_file = os.path.join(output_dir, f"Cruise_modificado_compressed.csv")
+    #output_file = os.path.join(output_dir, f"Fishing_modificado_compressed.csv")
+    output_file = os.path.join(output_dir, f"Tanker_modificado_compressed.csv")
 
     num_puntos_deseados = 8
     trayectorias_omitidas = 0
+
+    first_write = True
 
     with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for id in trajectory_ids:
             latitudes = df[df['Trajectory_ID'] == id]['Latitude'].tolist()
             longitudes = df[df['Trajectory_ID'] == id]['Longitude'].tolist()
             puntos_iniciales = np.array(list(zip(latitudes, longitudes)))
+            
             if len(puntos_iniciales) < num_puntos_deseados:
                 trayectorias_omitidas += 1
                 continue
-            puntos_finales = [0]
+            
+            indices_puntos_finales = [0]
             epsilon = 0.00005
-            rdp(0, len(puntos_iniciales) - 1, puntos_iniciales, puntos_finales, epsilon)
-            puntos_finales.append(len(puntos_iniciales) - 1)
-            puntos_finales = sorted(puntos_finales)
-            #print(puntos_finales)
-            ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_iniciales)
-            #print(puntos_finales)
-            graficar_rutas(puntos_iniciales, puntos_finales, id)
+            rdp(0, len(puntos_iniciales) - 1, puntos_iniciales, indices_puntos_finales, epsilon)
+            indices_puntos_finales.append(len(puntos_iniciales) - 1)
+            indices_puntos_finales = sorted(indices_puntos_finales)
+            
+            ajustar_numero_de_puntos(indices_puntos_finales, num_puntos_deseados, puntos_iniciales)
+            
+            #graficar_rutas(puntos_iniciales, indices_puntos_finales, id)
+            
+            df_trayectoria = df[df['Trajectory_ID'] == id]
+            guardar_puntos_seleccionados(df_trayectoria, indices_puntos_finales, id, output_file, first_write)
+            first_write = False
 
     print(f"Imágenes comprimidas y guardadas OK !!!. Se han omitido {trayectorias_omitidas} trayectorias")
