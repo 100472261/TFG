@@ -1,0 +1,46 @@
+import os
+import pandas as pd
+import numpy as np
+import pywt
+import matplotlib.pyplot as plt
+
+if __name__ == "__main__":
+
+    df_path = "./Wavelets_pruebas/Trayectoria_39.csv"
+
+    df = pd.read_csv(df_path)
+
+    trajectory_ids = df['Trajectory_ID'].unique()
+
+    img_dir = "./Wavelets_pruebas"
+    os.makedirs(img_dir, exist_ok=True)
+
+    for id in trajectory_ids:
+        trajectory_data = df[df['Trajectory_ID'] == id]['Bearing'].dropna().round(4).to_list()
+        trajectory_data = trajectory_data * 10
+
+        family = ['mexh', 'morl']
+
+        for wv in family:
+            scales = np.arange(1, 100)
+            coefficients, frequencies = pywt.cwt(trajectory_data, scales, wv)
+
+            plt.figure(figsize=(15, 10))
+            plt.subplot(2, 1, 1)
+            plt.plot(trajectory_data)
+            plt.title('Time Domain')
+            plt.xlabel('time [s]')
+            plt.ylabel('Amplitude')
+
+            plt.subplot(2, 1, 2)
+            coef_abs = np.abs(coefficients)
+            plt.imshow(coef_abs, extent=[0, len(trajectory_data), 1, 100], cmap='inferno', aspect='auto', vmax=np.percentile(np.abs(coefficients), 99), vmin=np.percentile(np.abs(coefficients), 1))
+            plt.title('Time-Frequency Domain')
+            plt.xlabel('time [s]')
+            plt.ylabel('Scale')
+            plt.colorbar(label='Magnitude')
+            plt.tight_layout()
+
+            plt.savefig(f"{img_dir}/{wv}_{id}.png")
+
+    print(f"Trayectorias en el dominio del tiempo y la frecuencia guardadas OK !!!")
