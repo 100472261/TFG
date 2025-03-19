@@ -17,11 +17,13 @@ if __name__ == "__main__":
 
     for id in trajectory_ids:
         trajectory_data = df[df['Trajectory_ID'] == id]['Bearing'].dropna().round(4).to_list()
-        trajectory_data = trajectory_data * 10
+        trajectory_data = trajectory_data * 40
 
         family = ['mexh', 'morl']
 
         for wv in family:
+            #Escala grande  -> Detecta baja frecuencia (Forma general)
+            #Escala pequeña -> Detecta alta frecuencia (Detalles finos)
             scales = np.arange(1, 100)
             coefficients, frequencies = pywt.cwt(trajectory_data, scales, wv)
 
