@@ -105,7 +105,7 @@ def graficar_rutas(puntos_originales, puntos_simplificados, id):
     
     fig, ax = plt.subplots(figsize=(6, 6))
     #ax.plot(coordenadas_x, coordenadas_y, marker="o", linestyle="-", color="b", label="Original")
-    ax.plot(coordenadas_x_s, coordenadas_y_s, marker="o", linestyle="-", color="k", label="Simplificada")
+    ax.plot(coordenadas_x_s, coordenadas_y_s, linestyle="-", lw='3', color="k", label="Simplificada")
     ax.set_xticks([])
     ax.set_yticks([])
     #ax.legend()
@@ -126,7 +126,7 @@ def guardar_puntos_seleccionados(df, indices_puntos_finales, trajectory_id, outp
     df_seleccionado['Bearing'] = calcular_bearing(df_seleccionado['Latitude'], df_seleccionado['Longitude'], df_seleccionado['Latitude_2'], df_seleccionado['Longitude_2'])
     mode = 'w' if first_write else 'a'
     header = first_write
-    df_seleccionado.to_csv(output_file, mode=mode, index=False, header=header)
+    df_seleccionado.to_csv(output_file, mode=mode, index=False, header=header, float_format='%.15g')  # Ensure full precision
 
 if __name__ == "__main__":
 
@@ -140,25 +140,25 @@ if __name__ == "__main__":
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_comprimidas"
+    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_28"
     os.makedirs(img_dir, exist_ok=True)
 
-    #zip_filename = os.path.join(img_dir, "Compressed_Cargo.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Container.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Cruise.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Fishing.zip")
-    zip_filename = os.path.join(img_dir, "Compressed_Tanker.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Cargo_28.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Container_28.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Cruise_28.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Fishing_28.zip")
+    zip_filename = os.path.join(img_dir, "Compressed_Tanker_28.zip")
 
-    output_dir = "./Trayectorias/Tipos_de_barcos"
+    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_28"
     os.makedirs(output_dir, exist_ok=True)
 
-    #output_file = os.path.join(output_dir, f"Cargo_modificado_compressed.csv")
-    #output_file = os.path.join(output_dir, f"Container_modificado_compressed.csv")
-    #output_file = os.path.join(output_dir, f"Cruise_modificado_compressed.csv")
-    #output_file = os.path.join(output_dir, f"Fishing_modificado_compressed.csv")
-    output_file = os.path.join(output_dir, f"Tanker_modificado_compressed.csv")
+    #output_file = os.path.join(output_dir, f"Cargo_modificado_compressed_28.csv")
+    #output_file = os.path.join(output_dir, f"Container_modificado_compressed_28.csv")
+    #output_file = os.path.join(output_dir, f"Cruise_modificado_compressed_28.csv")
+    #output_file = os.path.join(output_dir, f"Fishing_modificado_compressed_28.csv")
+    output_file = os.path.join(output_dir, f"Tanker_modificado_compressed_28.csv")
 
-    num_puntos_deseados = 8
+    num_puntos_deseados = 28
     trayectorias_omitidas = 0
 
     first_write = True
@@ -181,7 +181,7 @@ if __name__ == "__main__":
             
             ajustar_numero_de_puntos(indices_puntos_finales, num_puntos_deseados, puntos_iniciales)
             
-            #graficar_rutas(puntos_iniciales, indices_puntos_finales, id)
+            graficar_rutas(puntos_iniciales, indices_puntos_finales, id)
             
             df_trayectoria = df[df['Trajectory_ID'] == id]
             guardar_puntos_seleccionados(df_trayectoria, indices_puntos_finales, id, output_file, first_write)
