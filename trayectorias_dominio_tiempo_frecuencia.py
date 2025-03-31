@@ -12,7 +12,11 @@ if __name__ == "__main__":
     #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Container_modificado_compressed_28.csv"
     #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cruise_modificado_compressed_28.csv"
     #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Fishing_modificado_compressed_28.csv"
-    df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28.csv"
+
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cargo_modificado_compressed_28_v2.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Container_modificado_compressed_28_v2.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28_v2.csv"
 
     df = pd.read_csv(df_path)
 

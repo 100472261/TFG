@@ -14,6 +14,6 @@ def split_csv_by_type(input_csv, output_folder):
         df_type.to_csv(output_file, index=False)
         print(f"Archivo generado: {output_file}")
 
-test_csv = "./Trayectorias/trajectories_dataset_ordenado.csv"
-output_directory = "./Trayectorias/Tipos_de_barcos"
+test_csv = "./Trayectorias/trajectories_dataset_ordenado_v2.csv"
+output_directory = "./Trayectorias/Tipos_de_barcos/v2"
 split_csv_by_type(test_csv, output_directory)
