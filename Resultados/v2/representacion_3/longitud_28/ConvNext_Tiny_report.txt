@@ -1,0 +1,9 @@
+              precision    recall  f1-score   support
+
+       Cargo       0.75      0.49      0.59       129
+   Container       0.20      0.89      0.32        19
+      Tanker       0.26      0.12      0.16        42
+
+    accuracy                           0.45       190
+   macro avg       0.40      0.50      0.36       190
+weighted avg       0.59      0.45      0.47       190
