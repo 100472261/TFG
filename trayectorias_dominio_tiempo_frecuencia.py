@@ -8,25 +8,17 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cargo_modificado_compressed_28.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Container_modificado_compressed_28.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cruise_modificado_compressed_28.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Fishing_modificado_compressed_28.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28.csv"
-
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cargo_modificado_compressed_28_v2.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Container_modificado_compressed_28_v2.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28_v2.csv"
-
-    #df_path = "./Prueba_Cargo.csv"
-    #df_path = "./Prueba_Container.csv"
-    df_path = "./Prueba_Tanker.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cargo_modificado_compressed_28_v3_COMPLETO.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Container_modificado_compressed_28_v3_COMPLETO.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cruise_modificado_compressed_28_v3_COMPLETO.csv"
+    #df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Fishing_modificado_compressed_28_v3_COMPLETO.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Tanker_modificado_compressed_28_v3_COMPLETO.csv"
 
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_dominio_tiempo_frecuencia/longitud_8"
+    img_dir = "./Imagenes/Trayectorias_dominio_tiempo_frecuencia/longitud_28"
     os.makedirs(img_dir, exist_ok=True)
 
     #zip_filename = os.path.join(img_dir, "Cargo.zip")
