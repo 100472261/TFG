@@ -11,7 +11,7 @@ def reconstruccion_señal():
     señal = np.zeros(N)
     for i in range(N):
         señal += amplitudes[i] * np.cos(2 * np.pi * xf[i] * t + phases[i])
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(angulos_ruta, 'o-', label="Señal original")
     plt.plot(señal, 'x-', label="Señal reconstruida", linestyle="--")
     plt.legend()
@@ -19,7 +19,7 @@ def reconstruccion_señal():
     plt.show()
 
 def representacion_dominio_frecuencia(id, xf_filtered, amplitudes_filtered):
-    plt.figure(figsize=(6, 6))
+    plt.figure(figsize=(12, 6))
     plt.scatter(xf_filtered, amplitudes_filtered, color="k", label="Amplitudes")
     plt.vlines(xf_filtered, ymin=0, ymax=amplitudes_filtered, color="k", linestyle="-")
     img_buffer = BytesIO()
@@ -30,19 +30,15 @@ def representacion_dominio_frecuencia(id, xf_filtered, amplitudes_filtered):
 
 if __name__ == "__main__":
 
-    df_path = "./Trayectorias/Tipos_de_barcos/Cargo_modificado_compressed.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/Container_modificado_compressed.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/Cruise_modificado_compressed.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/Fishing_modificado_compressed.csv"
-    #df_path = "./Trayectorias/Tipos_de_barcos/Tanker_modificado_compressed.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/Cargo_modificado_compressed_28_v3_COMPLETO.csv"
 
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    trajectory_ids = [21]
+    trajectory_ids = [6]
 
-    img_dir = "./Trayectorias/Pruebas/Imagenes"
+    img_dir = "./Imagenes"
     os.makedirs(img_dir, exist_ok=True)
 
     zip_filename = os.path.join(img_dir, "Frequency_Cargo.zip")
@@ -67,6 +63,6 @@ if __name__ == "__main__":
             
             reconstruccion_señal()
                 
-            #representacion_dominio_frecuencia(id, xf, amplitudes)
+            representacion_dominio_frecuencia(id, xf, amplitudes)
 
     print(f"Trayectorias en el dominio de la frecuencia guardadas OK !!!")
