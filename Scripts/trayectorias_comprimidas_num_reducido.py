@@ -25,7 +25,7 @@ def graficar_rutas(puntos, id, zipf):
     zipf.writestr(f"Trayectoria_comprimida_{id}.png", img_buffer.read())
 
 if __name__ == "__main__":
-    df_path = "./Trayectorias/Tipos_de_barcos/longitud_8/Tanker_modificado_compressed_8_v2.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_8/Tanker_modificado_compressed_8_v3.csv"
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
