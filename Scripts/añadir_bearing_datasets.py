@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from bearing import calcular_bearing
 
-df_path = "./Trayectorias/trajectories_dataset_ordenado_v3.csv"
+df_path = "./Trayectorias/trajectories_dataset_ordenado_v4.csv"
 df = pd.read_csv(df_path)
 
 types = df['Type'].unique()
@@ -32,5 +32,5 @@ for type_value in types:
     column_order = ['Trajectory_ID', 'Order', 'Latitude', 'Longitude', 'Latitude_2', 'Longitude_2', 'Bearing', 'Type']
     df_type = df_type[column_order]
     
-    file_name = f"./Trayectorias/Tipos_de_barcos/{type_value}_modificado_v3.csv"
+    file_name = f"./Trayectorias/Tipos_de_barcos/v4/{type_value}_modificado_v4.csv"
     df_type.to_csv(file_name, index=False)
