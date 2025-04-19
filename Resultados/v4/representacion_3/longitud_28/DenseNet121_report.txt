@@ -1,0 +1,11 @@
+              precision    recall  f1-score   support
+
+       Cargo       1.00      1.00      1.00       989
+     Fishing       0.91      0.90      0.90      1296
+    Military       1.00      1.00      1.00      1268
+     Sailing       0.90      0.91      0.90      1276
+      Tanker       0.98      0.98      0.98      1166
+
+    accuracy                           0.95      5995
+   macro avg       0.96      0.96      0.96      5995
+weighted avg       0.95      0.95      0.95      5995
