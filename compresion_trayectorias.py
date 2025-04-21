@@ -140,25 +140,25 @@ if __name__ == "__main__":
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_28"
+    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_8"
     os.makedirs(img_dir, exist_ok=True)
 
-    #zip_filename = os.path.join(img_dir, "Compressed_Cargo_28_v4.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Fishing_28_v4.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Military_28_v4.zip")
-    #zip_filename = os.path.join(img_dir, "Compressed_Sailing_28_v4.zip")
-    zip_filename = os.path.join(img_dir, "Compressed_Tanker_28_v4.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Cargo_8_v4.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Fishing_8_v4.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Military_8_v4.zip")
+    #zip_filename = os.path.join(img_dir, "Compressed_Sailing_8_v4.zip")
+    zip_filename = os.path.join(img_dir, "Compressed_Tanker_8_v4.zip")
 
-    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_28"
+    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_8"
     os.makedirs(output_dir, exist_ok=True)
 
-    #output_file = os.path.join(output_dir, f"Cargo_modificado_compressed_28_v4_COMPLETO.csv")
-    #output_file = os.path.join(output_dir, f"Fishing_modificado_compressed_28_v4_COMPLETO.csv")
-    #output_file = os.path.join(output_dir, f"Military_modificado_compressed_28_v4_COMPLETO.csv")
-    #output_file = os.path.join(output_dir, f"Sailing_modificado_compressed_28_v4_COMPLETO.csv")
-    output_file = os.path.join(output_dir, f"Tanker_modificado_compressed_28_v4_COMPLETO.csv")
+    #output_file = os.path.join(output_dir, f"Cargo_modificado_compressed_8_v4_COMPLETO.csv")
+    #output_file = os.path.join(output_dir, f"Fishing_modificado_compressed_8_v4_COMPLETO.csv")
+    #output_file = os.path.join(output_dir, f"Military_modificado_compressed_8_v4_COMPLETO.csv")
+    #output_file = os.path.join(output_dir, f"Sailing_modificado_compressed_8_v4_COMPLETO.csv")
+    output_file = os.path.join(output_dir, f"Tanker_modificado_compressed_8_v4_COMPLETO.csv")
 
-    num_puntos_deseados = 28
+    num_puntos_deseados = 8
     trayectorias_omitidas = 0
 
     first_write = True
