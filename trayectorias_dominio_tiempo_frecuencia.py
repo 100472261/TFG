@@ -8,20 +8,16 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
 
-    df_path = "./Trayectorias/Tipos_de_barcos/longitud_8/Tanker_modificado_compressed_8_v4.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_28/(90-99)_modificado_compressed_28_v5_COMPLETO.csv"
 
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_dominio_tiempo_frecuencia/longitud_8"
+    img_dir = "./Imagenes/Trayectorias_dominio_tiempo_frecuencia/longitud_28"
     os.makedirs(img_dir, exist_ok=True)
 
-    #zip_filename = os.path.join(img_dir, "Cargo.zip")
-    #zip_filename = os.path.join(img_dir, "Fishing.zip")
-    #zip_filename = os.path.join(img_dir, "Military.zip")
-    #zip_filename = os.path.join(img_dir, "Sailing.zip")
-    zip_filename = os.path.join(img_dir, "Tanker.zip")
+    zip_filename = os.path.join(img_dir, "(90-99).zip")
 
     with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for id in trajectory_ids:

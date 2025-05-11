@@ -1,36 +1,58 @@
 import numpy as np
 import pandas as pd
+import os
 from bearing import calcular_bearing
 
-df_path = "./Trayectorias/trajectories_dataset_ordenado_v4.csv"
-df = pd.read_csv(df_path)
+# Define las carpetas de entrada y salida
+input_folder = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type"
+output_folder = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type"
 
-types = df['Type'].unique()
+# Crear carpeta de salida si no existe
+os.makedirs(output_folder, exist_ok=True)
 
-for type_value in types:
+# Obtener todos los archivos CSV en la carpeta
+csv_files = sorted([f for f in os.listdir(input_folder) if f.endswith('.csv')])
 
-    df_type = df[df['Type'] == type_value].copy()
-    
-    df_type['Latitude_2'] = np.nan
-    df_type['Longitude_2'] = np.nan
-    df_type['Bearing'] = np.nan
-    
-    trajectory_ids = df_type['Trajectory_ID'].unique()
-    
+# Procesar cada archivo CSV
+for file in csv_files:
+    input_path = os.path.join(input_folder, file)
+    df = pd.read_csv(input_path)
+
+    # Añadir las nuevas columnas
+    df['Latitude_2'] = np.nan
+    df['Longitude_2'] = np.nan
+    df['Time_2'] = None
+    df['Bearing'] = np.nan
+
+    # Para cada Trajectory_ID
+    trajectory_ids = df['Trajectory_ID'].unique()
+
     for id in trajectory_ids:
-        indices = df_type[df_type['Trajectory_ID'] == id].index
+        indices = df[df['Trajectory_ID'] == id].index
         for i in range(len(indices) - 1):
             idx1, idx2 = indices[i], indices[i + 1]
-            lat1, lon1 = df_type.at[idx1, 'Latitude'], df_type.at[idx1, 'Longitude']
-            lat2, lon2 = df_type.at[idx2, 'Latitude'], df_type.at[idx2, 'Longitude']
+            lat1, lon1 = df.at[idx1, 'Latitude'], df.at[idx1, 'Longitude']
+            lat2, lon2 = df.at[idx2, 'Latitude'], df.at[idx2, 'Longitude']
+            time_2 = df.at[idx2, 'Time_1']
             bearing = calcular_bearing(lat1, lon1, lat2, lon2)
-            
-            df_type.at[idx1, 'Latitude_2'] = lat2
-            df_type.at[idx1, 'Longitude_2'] = lon2
-            df_type.at[idx1, 'Bearing'] = bearing
-    
-    column_order = ['Trajectory_ID', 'Order', 'Latitude', 'Longitude', 'Latitude_2', 'Longitude_2', 'Bearing', 'Type']
-    df_type = df_type[column_order]
-    
-    file_name = f"./Trayectorias/Tipos_de_barcos/v4/{type_value}_modificado_v4.csv"
-    df_type.to_csv(file_name, index=False)
+
+            df.at[idx1, 'Latitude_2'] = lat2
+            df.at[idx1, 'Longitude_2'] = lon2
+            df.at[idx1, 'Time_2'] = time_2
+            df.at[idx1, 'Bearing'] = bearing
+
+    # Reordenar las columnas
+    column_order = ['Trajectory_ID', 'Order', 'Time_1', 'Latitude', 'Longitude', 'Time_2', 'Latitude_2', 'Longitude_2', 'Bearing', 'Type']
+    df = df[column_order]
+
+    # Crear el nombre del archivo de salida
+    file_number = file.split('.')[0]  # Extraer el número del nombre
+    output_filename = f"{file_number}_modificado_v5.csv"
+    output_path = os.path.join(output_folder, output_filename)
+
+    # Guardar el DataFrame procesado
+    df.to_csv(output_path, index=False)
+
+    print(f"Procesado: {file}")
+
+print("Todos los archivos han sido procesados correctamente.")
