@@ -136,17 +136,17 @@ if __name__ == "__main__":
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_28"
+    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_8"
     os.makedirs(img_dir, exist_ok=True)
 
     zip_filename = os.path.join(img_dir, "(90-99).zip")
 
-    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_28"
+    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_8"
     os.makedirs(output_dir, exist_ok=True)
 
-    output_file = os.path.join(output_dir, f"(90-99)_modificado_compressed_28_v5_COMPLETO.csv")
+    output_file = os.path.join(output_dir, f"(90-99)_modificado_compressed_8_v5_COMPLETO.csv")
 
-    num_puntos_deseados = 28
+    num_puntos_deseados = 8
     trayectorias_omitidas = 0
 
     first_write = True

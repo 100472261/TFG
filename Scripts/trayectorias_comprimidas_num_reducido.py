@@ -25,14 +25,14 @@ def graficar_rutas(puntos, id, zipf):
     zipf.writestr(f"Trayectoria_comprimida_{id}.png", img_buffer.read())
 
 if __name__ == "__main__":
-    df_path = "./Trayectorias/Tipos_de_barcos/longitud_8/Tanker_modificado_compressed_8_v4.csv"
+    df_path = "./Trayectorias/Tipos_de_barcos/longitud_8/(90-99)_modificado_compressed_8_v5.csv"
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
     img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_8"
     os.makedirs(img_dir, exist_ok=True)
 
-    zip_filename = os.path.join(img_dir, "Trayectorias_Tanker_8.zip")
+    zip_filename = os.path.join(img_dir, "Trayectoria_(90-99)_8.zip")
     trayectorias_omitidas = 0
 
     with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
