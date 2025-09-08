@@ -4,8 +4,8 @@ import os
 from bearing import calcular_bearing
 
 # Define las carpetas de entrada y salida
-input_folder = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type"
-output_folder = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type"
+input_folder = "./Trayectorias/anomalias-v2"
+output_folder = "./Trayectorias/anomalias-v2"
 
 # Crear carpeta de salida si no existe
 os.makedirs(output_folder, exist_ok=True)
@@ -47,7 +47,7 @@ for file in csv_files:
 
     # Crear el nombre del archivo de salida
     file_number = file.split('.')[0]  # Extraer el número del nombre
-    output_filename = f"{file_number}_modificado_v5.csv"
+    output_filename = f"{file_number}_modificado.csv"
     output_path = os.path.join(output_folder, output_filename)
 
     # Guardar el DataFrame procesado

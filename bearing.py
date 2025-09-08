@@ -16,3 +16,5 @@ def calcular_bearing(lat1, lon1, lat2, lon2):
     bearing = (bearing + 360) % 360
 
     return bearing
+
+print(round(calcular_bearing(35.262768  , -59.450240 , 35.262800 , -59.448742), 2))  # Example coordinates (NYC to LA)

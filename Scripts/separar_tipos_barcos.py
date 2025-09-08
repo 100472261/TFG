@@ -8,7 +8,7 @@ def count_unique_trajectory_ids(input_csv):
     print(f"Número de Trajectory_ID únicos: {unique_ids}")
 
 # Ejemplo de uso:
-test_csv = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type/all_modificado_v5.csv"
+test_csv = "./Trayectorias/anomalias-v2/1.csv"
 count_unique_trajectory_ids(test_csv)
 
 """
@@ -37,11 +37,11 @@ def split_csv_by_type(input_csv, output_folder):
         df_type.to_csv(output_file, index=False)
         print(f"Archivo generado: {output_file}")
 
-
-test_csv = "./Trayectorias/trajectories_dataset_ordenado_v5.csv"
-output_directory = "./Trayectorias/Tipos_de_barcos/v5"
+test_csv = "./Trayectorias/anomaly_dataset_ordenado_v2.csv"
+output_directory = "./Trayectorias/anomalias-v2"
 split_csv_by_type(test_csv, output_directory)
 """
+
 """
 def view_csv_attributes(input_csv):
     df = pd.read_csv(input_csv)

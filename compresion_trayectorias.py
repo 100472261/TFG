@@ -43,7 +43,7 @@ def encontrar_punto_mas_alejado(puntos_iniciales, startIndex, endIndex, epsilon)
 
     for i in range(startIndex + 1, endIndex):
         distancia = distancia_punto_a_recta(puntos_iniciales[i], puntos_iniciales[startIndex], puntos_iniciales[endIndex])
-
+        #print(f"Distancia del punto {i} al segmento ({startIndex}-{endIndex}): {distancia}")
         if distancia > max_distancia:
             max_distancia = distancia
             indice_punto_mas_alejado = i
@@ -58,8 +58,10 @@ def rdp(startIndex, endIndex, puntos_iniciales, puntos_finales, epsilon):
     proximo_punto = encontrar_punto_mas_alejado(puntos_iniciales, startIndex, endIndex, epsilon)
 
     if proximo_punto != -1:
+        #print(f"🔹 Se añade punto clave en índice {proximo_punto}")
+        puntos_finales.append(proximo_punto)  # ✅ AÑADIR el punto más alejado
+        #print(f"📌 puntos_finales actualizados: {sorted(puntos_finales)}")
         rdp(startIndex, proximo_punto, puntos_iniciales, puntos_finales, epsilon)
-        puntos_finales.append(proximo_punto)
         rdp(proximo_punto, endIndex, puntos_iniciales, puntos_finales, epsilon)
 
 #Ajusta el número de puntos en la trayectoria simplificada
@@ -71,14 +73,16 @@ def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_inicial
 
         for i in range(len(puntos_finales) - 1):
             gap = puntos_finales[i + 1] - puntos_finales[i]
+            #print(f"gap entre {puntos_finales[i]} y {puntos_finales[i + 1]}: {gap}")
             if gap > max_gap:
                 max_gap = gap
                 index_to_insert = i
-
+        #print(f"index_to_insert: {index_to_insert}, max_gap: {max_gap}")
         if index_to_insert != -1:
             new_point = (puntos_finales[index_to_insert] + puntos_finales[index_to_insert + 1]) // 2
             if new_point not in puntos_finales:
                 puntos_finales.insert(index_to_insert + 1, new_point)
+                #print(f"ajuste - puntos_finales tras insertar {new_point}: {puntos_finales}")
 
     #Elimina los puntos con menor impacto geométrico
     while len(puntos_finales) > num_puntos_deseados:
@@ -86,18 +90,27 @@ def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_inicial
         index_to_remove = -1
 
         for i in range(1, len(puntos_finales) - 1):
+            idx_prev = puntos_finales[i - 1]
+            idx_curr = puntos_finales[i]
+            idx_next = puntos_finales[i + 1]
+
             d = distancia_punto_a_recta(
-                puntos_iniciales[puntos_finales[i]], 
-                puntos_iniciales[puntos_finales[i - 1]], 
-                puntos_iniciales[puntos_finales[i + 1]]
-            )
+                puntos_iniciales[idx_curr], 
+                puntos_iniciales[idx_prev], 
+                puntos_iniciales[idx_next]
+        )
+
+            #print(f"🔍 Evaluando eliminar punto {idx_curr} entre ({idx_prev}, {idx_next}) → error geométrico = {d:.8f}")
 
             if d < min_error:
                 min_error = d
                 index_to_remove = i
 
         if index_to_remove != -1:
+            eliminado = puntos_finales[index_to_remove]
+            #print(f"🗑️ Eliminando punto {eliminado} entre "f"({puntos_finales[index_to_remove - 1]}, {puntos_finales[index_to_remove + 1]}) " f"con error = {min_error:.8f}")
             puntos_finales.pop(index_to_remove)
+            #print(f"📌 Puntos restantes: {puntos_finales}\n")
 
 def graficar_rutas(puntos_originales, puntos_simplificados, id):
     #coordenadas_y, coordenadas_x = zip(*puntos_originales)
@@ -130,23 +143,25 @@ def guardar_puntos_seleccionados(df, indices_puntos_finales, trajectory_id, outp
 
 if __name__ == "__main__":
 
-    df_path = "./Trayectorias/Tipos_de_barcos/v5/(90-99) Other Type/all_modificado_v5.csv"
+    df_path = "./Trayectorias/anomalias-v2/1_modificado.csv"
 
     df = pd.read_csv(df_path)
 
     trajectory_ids = df['Trajectory_ID'].unique()
 
-    img_dir = "./Imagenes/Trayectorias_comprimidas/longitud_8"
+    trajectory_ids = [8]
+
+    img_dir = "./Papelera/diferentes_epsilon/8"
     os.makedirs(img_dir, exist_ok=True)
 
-    zip_filename = os.path.join(img_dir, "(90-99).zip")
+    zip_filename = os.path.join(img_dir, "8.zip")
 
-    output_dir = "./Trayectorias/Tipos_de_barcos/longitud_8"
+    output_dir = "./Papelera/diferentes_epsilon/8"
     os.makedirs(output_dir, exist_ok=True)
 
-    output_file = os.path.join(output_dir, f"(90-99)_modificado_compressed_8_v5_COMPLETO.csv")
+    output_file = os.path.join(output_dir, f"8_longitud_28.csv")
 
-    num_puntos_deseados = 8
+    num_puntos_deseados = 28
     trayectorias_omitidas = 0
 
     first_write = True
@@ -166,9 +181,10 @@ if __name__ == "__main__":
             rdp(0, len(puntos_iniciales) - 1, puntos_iniciales, indices_puntos_finales, epsilon)
             indices_puntos_finales.append(len(puntos_iniciales) - 1)
             indices_puntos_finales = sorted(indices_puntos_finales)
-            
+            #print(indices_puntos_finales)
             ajustar_numero_de_puntos(indices_puntos_finales, num_puntos_deseados, puntos_iniciales)
-            
+            #print(puntos_iniciales)
+            print(indices_puntos_finales)
             graficar_rutas(puntos_iniciales, indices_puntos_finales, id)
             
             df_trayectoria = df[df['Trajectory_ID'] == id]
