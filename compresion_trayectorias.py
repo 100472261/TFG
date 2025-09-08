@@ -58,9 +58,9 @@ def rdp(startIndex, endIndex, puntos_iniciales, puntos_finales, epsilon):
     proximo_punto = encontrar_punto_mas_alejado(puntos_iniciales, startIndex, endIndex, epsilon)
 
     if proximo_punto != -1:
-        #print(f"🔹 Se añade punto clave en índice {proximo_punto}")
-        puntos_finales.append(proximo_punto)  # ✅ AÑADIR el punto más alejado
-        #print(f"📌 puntos_finales actualizados: {sorted(puntos_finales)}")
+        #print(f"Se añade punto clave en índice {proximo_punto}")
+        puntos_finales.append(proximo_punto)  #AÑADIR el punto más alejado
+        #print(f"puntos_finales actualizados: {sorted(puntos_finales)}")
         rdp(startIndex, proximo_punto, puntos_iniciales, puntos_finales, epsilon)
         rdp(proximo_punto, endIndex, puntos_iniciales, puntos_finales, epsilon)
 
@@ -100,7 +100,7 @@ def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_inicial
                 puntos_iniciales[idx_next]
         )
 
-            #print(f"🔍 Evaluando eliminar punto {idx_curr} entre ({idx_prev}, {idx_next}) → error geométrico = {d:.8f}")
+            #print(f"Evaluando eliminar punto {idx_curr} entre ({idx_prev}, {idx_next}) → error geométrico = {d:.8f}")
 
             if d < min_error:
                 min_error = d
@@ -108,9 +108,9 @@ def ajustar_numero_de_puntos(puntos_finales, num_puntos_deseados, puntos_inicial
 
         if index_to_remove != -1:
             eliminado = puntos_finales[index_to_remove]
-            #print(f"🗑️ Eliminando punto {eliminado} entre "f"({puntos_finales[index_to_remove - 1]}, {puntos_finales[index_to_remove + 1]}) " f"con error = {min_error:.8f}")
+            #print(f"Eliminando punto {eliminado} entre "f"({puntos_finales[index_to_remove - 1]}, {puntos_finales[index_to_remove + 1]}) " f"con error = {min_error:.8f}")
             puntos_finales.pop(index_to_remove)
-            #print(f"📌 Puntos restantes: {puntos_finales}\n")
+            #print(f"Puntos restantes: {puntos_finales}\n")
 
 def graficar_rutas(puntos_originales, puntos_simplificados, id):
     #coordenadas_y, coordenadas_x = zip(*puntos_originales)
