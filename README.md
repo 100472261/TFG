@@ -1,4 +1,4 @@
-<h2 align="left">Análisis y clasificación de trayectorias marítimas mediante aprendizaje profundo</h2>
+<h2 align="left"> 🎓 Análisis y clasificación de trayectorias marítimas mediante aprendizaje profundo</h2>
 
 <h3>● Introducción:</h3>
 <div align="justify">
